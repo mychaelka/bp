@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./doubleml-for-py/doubleml"
+    ]
+}
