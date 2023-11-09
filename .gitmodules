@@ -1,0 +1,6 @@
+[submodule "doubleml-docs"]
+	path = doubleml-docs
+	url = ./doubleml-docs/
+[submodule "doubleml-for-py"]
+	path = doubleml-for-py
+	url = ./doubleml-for-py/
