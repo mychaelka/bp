@@ -1,0 +1,57 @@
+TODO:
+    [ ] Write code for the score functions
+
+
+GENERAL NOTES:
+    - Each model in the DoubleML framework needs data of type DoubleMLData 
+    (needs to be converted beforehand)
+
+SAMPLE SELECTION MODELS:
+    - Multiple different estimators: missingness at random, nonignorable nonresponse, 
+    sequential conditional independence
+    - Add a parameter determining which estimator to be used
+    - uses helper function "hdseltreat"
+        - hdseltreat uses "MLfunct", "predict"
+    - # Missingness at random (MAR):
+        - 
+
+    # Parameters of the function:
+        - y: Dependent variable, may contain missings 
+        - d: Treatment variable, must be discrete, cannot contain missing values
+        - x: Covariates, cannot contain missings 
+        - s: Selection indicator: 1 if y is observed, 0 otherwise
+        - z: Instrumental variable (optional) for selection s. If NULL, outcome selection based on 
+        observables (x, d) known as "missing at random" is assumed. If z is defined, outcome selection 
+        based on unobservables known as "non-ignorable missingness" is assumed. Default is NULL.
+        - selected: Must be 1 if ATE is to be estimated for the selected population without missing outcomes. 
+        Must be 0 if the ATE is to be estimated for the total population. Default is 0 (ATE for total population). 
+        This parameter is ignored if z is NULL (under MAR, the ATE in the total population is estimated).
+        - dtreat: Value of the treatment in the treatment group. Default is 1.
+        - dcontrol: Value of the treatment in the control group. Default is 0.
+        - trim: Trimming rule for discarding observations with (products of) propensity scores that are smaller 
+        than trim (to avoid too small denominators in weighting by the inverse of the propensity scores). 
+        If selected is 0 (ATE estimation for the total population), observations with products of the treatment and 
+        selection propensity scores that are smaller than trim are discarded.  If selected is 1 (ATE estimation for the subpopulation with observed outcomes), 
+        observations with treatment propensity scores smaller than trim are discarded. Default for trim is 0.01.
+        - MLmethod: Machine learning method for estimating the nuisance parameters based on the SuperLearner package. Must be either 
+        "lasso" (default) for lasso estimation, "randomforest" for random forests, "xgboost" for xg boosting, "svm" for support vector machines, "ensemble" for 
+        using an ensemble algorithm based on all previously mentioned machine learners, or "parametric" for linear or logit regression.
+        - k: Number of folds in k-fold cross-fitting. Default is 3.
+        - normalized: If set to TRUE, then the inverse probability-based weights are normalized such that they add up to 1 within treatment groups. Default is TRUE.
+    
+    # Return values:
+        - A treatDML object contains eight components -- effect, se, pval, ntrimmed, meantreat, meancontrol, pstreat, and pscontrol
+        - effect: estimate of the average treatment effect.
+        - se: standard error of the effect.
+        - pval: p-value of the effect estimate.
+        - ntrimmed: number of discarded (trimmed) observations due to extreme propensity scores.
+        - meantreat: Estimate of the mean potential outcome under treatment.
+        - meancontrol: Estimate of the mean potential outcome under control.
+        - pstreat: P-score estimates for treatment in treatment group.
+        - pscontrol: P-score estimates for treatment in control group. 
+    
+    # Data assumptions:
+        - y may contain missing values
+        - d cannot contain missing values
+        - X cannot contain missing values 
+        - 
