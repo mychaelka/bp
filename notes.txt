@@ -1,0 +1,8 @@
+TODO: 
+    - 
+
+GENERAL NOTES:
+    - Each model in the DoubleML framework needs data of type DoubleMLData 
+    (needs to be converted beforehand)
+
+## Sample selection models
