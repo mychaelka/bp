@@ -6,6 +6,18 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.base import clone
 from doubleml import DoubleMLData
 
+from sklearn.utils import check_X_y
+from sklearn.utils.multiclass import type_of_target
+from sklearn.base import clone
+
+import warnings
+
+from doubleml.double_ml import DoubleML
+from doubleml.double_ml_data import DoubleMLData
+from doubleml.double_ml_score_mixins import LinearScoreMixin
+
+from doubleml._utils import _dml_cv_predict, _dml_tune
+from doubleml._utils_checks import _check_score, _check_finite_predictions, _check_is_propensity
 
 np.random.seed(3141)
 
@@ -28,3 +40,5 @@ y[s == 0] = 0  # Setting values to 0 based on the selection equation
 ## Creating the DoubleMLData object
 simul_data = DoubleMLData.from_arrays(X, y, d)
 print(simul_data)
+
+
