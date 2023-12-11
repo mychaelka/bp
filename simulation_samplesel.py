@@ -2,19 +2,15 @@
 import numpy as np
 import doubleml as dml
 from doubleml.datasets import make_pliv_CHS2015
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.base import clone
 from doubleml import DoubleMLData
+from doubleml.double_ml_samplesel import DoubleMLSS
 
-from sklearn.utils import check_X_y
-from sklearn.utils.multiclass import type_of_target
-from sklearn.base import clone
-
-import warnings
+from sklearn.linear_model import LassoCV
 
 from doubleml.double_ml import DoubleML
 from doubleml.double_ml_data import DoubleMLData
-from doubleml.double_ml_score_mixins import LinearScoreMixin
 
 from doubleml._utils import _dml_cv_predict, _dml_tune
 from doubleml._utils_checks import _check_score, _check_finite_predictions, _check_is_propensity
@@ -33,12 +29,27 @@ z = np.random.randn(n)
 s = np.where(np.dot(X, beta) + 0.25 * d + z + e[0] > 0, 1, 0)  # Selection equation
 y = np.dot(X, beta) + 0.5 * d + e[1]  # Outcome equation
 y[s == 0] = 0  # Setting values to 0 based on the selection equation
-
 #  The true ATE is equal to 0.5
 
-
 ## Creating the DoubleMLData object
-simul_data = DoubleMLData.from_arrays(X, y, d)
+simul_data = DoubleMLData.from_arrays(X, y, d, z=None, t=s)
 print(simul_data)
 
+learner = LassoCV()
+learner_class = RandomForestClassifier(n_estimators = 500, max_features = 'sqrt', max_depth= 5)
+ml_mu_sim = clone(learner)
+ml_pi_sim = clone(learner_class)
+ml_p_sim = clone(learner_class)
 
+np.random.seed(3141)
+obj_dml_sim = DoubleMLSS(simul_data, ml_mu_sim, ml_pi_sim, ml_p_sim)
+obj_dml_sim.fit()
+#obj_dml_sim.sensitivity_analysis()
+print(obj_dml_sim)
+#obj_dml_sim.sensitivity_plot()
+
+#obj_dml_sim_control = DoubleMLSS(simul_data, ml_mu_sim, ml_pi_sim, ml_p_sim, treatment=0)
+#obj_dml_sim_control.fit()
+#obj_dml_sim.sensitivity_analysis()
+#print(obj_dml_sim_control)
+#obj_dml_sim.sensitivity_plot()
