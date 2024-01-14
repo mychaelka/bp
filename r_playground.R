@@ -8,7 +8,7 @@ library(mvtnorm)
 library(stats)
 library(causalweight)
 
-n=20000                            # sample size
+n=2000                            # sample size
 p=100                             # number of covariates
 s=2                               # number of covariates that are confounders
 sigma=matrix(c(1,0.5,0.5,1),2,2)
