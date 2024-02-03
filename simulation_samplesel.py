@@ -15,7 +15,7 @@ from doubleml.double_ml_data import DoubleMLData
 from doubleml._utils import _dml_cv_predict, _dml_tune
 from doubleml._utils_checks import _check_score, _check_finite_predictions, _check_is_propensity
 
-np.random.seed(123)
+#np.random.seed(123)
 
 n = 2000  # sample size
 p = 100  # number of covariates
@@ -41,7 +41,6 @@ ml_mu_sim = clone(learner)
 ml_pi_sim = clone(learner_class)
 ml_p_sim = clone(learner_class)
 
-np.random.seed(3141)
 obj_dml_sim = DoubleMLSS(simul_data, ml_mu_sim, ml_pi_sim, ml_p_sim)
 obj_dml_sim.fit()
 #obj_dml_sim.sensitivity_analysis()
