@@ -31,9 +31,11 @@ y = np.dot(X, beta) + 0.5 * d + e[1]  # Outcome equation
 y[s == 0] = 0  # Setting values to 0 based on the selection equation
 #  The true ATE is equal to 0.5
 
+
+##### MISSING AT RANDOM ##### - RMSE'S ARE VERY LARGE, LOOK INTO THAT!!!! 
 ## Creating the DoubleMLData object
 simul_data = DoubleMLData.from_arrays(X, y, d, z=None, t=s)
-print(simul_data)
+#print(simul_data)
 
 learner = LassoCV()
 learner_class = RandomForestClassifier()
@@ -42,6 +44,24 @@ ml_pi_sim = clone(learner_class)
 ml_p_sim = clone(learner_class)
 
 obj_dml_sim = DoubleMLSS(simul_data, ml_mu_sim, ml_pi_sim, ml_p_sim)
+obj_dml_sim.fit()
+#obj_dml_sim.sensitivity_analysis()
+print(obj_dml_sim)
+#obj_dml_sim.sensitivity_plot()
+
+
+####### NONIGNORABLE NONRESPONSE #######
+## Creating the DoubleMLData object
+simul_data = DoubleMLData.from_arrays(X, y, d, z=z, t=s)
+#print(simul_data)
+
+learner = LassoCV()
+learner_class = RandomForestClassifier()
+ml_mu_sim = clone(learner)
+ml_pi_sim = clone(learner_class)
+ml_p_sim = clone(learner_class)
+
+obj_dml_sim = DoubleMLSS(simul_data, ml_mu_sim, ml_pi_sim, ml_p_sim, score='nonignorable_nonresponse')
 obj_dml_sim.fit()
 #obj_dml_sim.sensitivity_analysis()
 print(obj_dml_sim)
