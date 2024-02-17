@@ -45,8 +45,8 @@ ml_mu_sim = clone(learner)
 ml_pi_sim = clone(learner_class)
 ml_p_sim = clone(learner_class)
 
-obj_dml_sim = DoubleMLS(simul_data, ml_mu_sim, ml_pi_sim, ml_p_sim)
-print(obj_dml_sim.fit().summary)
+#obj_dml_sim = DoubleMLS(simul_data, ml_mu_sim, ml_pi_sim, ml_p_sim)
+#print(obj_dml_sim.fit().summary)
 #obj_dml_sim.sensitivity_analysis()
 #print(obj_dml_sim)
 #obj_dml_sim.sensitivity_plot()
@@ -87,7 +87,7 @@ def simul_function():
     y = np.dot(X, beta) + 0.5 * d + e[1]  # Outcome equation
     y[s == 0] = 0
 
-    simul_data = DoubleMLData.from_arrays(X, y, d, z=None, t=s)
+    simul_data = DoubleMLData.from_arrays(X, y, d, z=z, t=s)
 
     learner = LassoCV()
     learner_class = LogisticRegressionCV()
@@ -95,7 +95,7 @@ def simul_function():
     ml_pi_sim = clone(learner_class)
     ml_p_sim = clone(learner_class)
 
-    obj_dml_sim = DoubleMLS(simul_data, ml_mu_sim, ml_pi_sim, ml_p_sim)
+    obj_dml_sim = DoubleMLS(simul_data, ml_mu_sim, ml_pi_sim, ml_p_sim, score='nonignorable')
     
     obj_dml_sim.fit()
 
@@ -103,16 +103,16 @@ def simul_function():
 
 params = []
 
-# for i in range(500):
-#     params.append(simul_function())
-#     print(i)
+for i in range(500):
+     params.append(simul_function())
+     print(i)
 
-# q25, q75 = np.percentile(params, [25, 75])
-# bin_width = 2 * (q75 - q25) * len(params) ** (-1/3)
-# bins = round((max(params) - min(params)) / bin_width)
+q25, q75 = np.percentile(params, [25, 75])
+bin_width = 2 * (q75 - q25) * len(params) ** (-1/3)
+bins = round((max(params) - min(params)) / bin_width)
 
-# print("Freedman-Diaconis number of bins:", bins)
-# plt.hist(params, density=True, bins=bins)
-# plt.xlabel('ATE estimates')
-# plt.ylabel('Count')
-# plt.show()
+print("Freedman-Diaconis number of bins:", bins)
+plt.hist(params, density=True, bins=bins)
+plt.xlabel('ATE estimates')
+plt.ylabel('Count')
+plt.show()
