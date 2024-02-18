@@ -5,7 +5,6 @@ from doubleml.datasets import make_pliv_CHS2015
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.base import clone
 from doubleml import DoubleMLData
-from doubleml.double_ml_samplesel import DoubleMLSS
 from doubleml.double_ml_selection import DoubleMLS
 
 from sklearn.linear_model import LassoCV, Lasso, LogisticRegressionCV
