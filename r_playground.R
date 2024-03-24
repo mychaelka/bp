@@ -22,7 +22,7 @@ y=x%*%beta+0.5*d+e[,2]            # outcome equation
 y[s==0]=0
 
 # The true ATE is equal to 0.5
-output=treatselDML(y,d,x,s,z)
+output=treatselDML(y,d,x,s)
 cat("ATE: ",round(c(output$effect),3),", standard error: ",
      round(c(output$se),3), ", p-value: ",round(c(output$pval),3))
  output$ntrimmed
